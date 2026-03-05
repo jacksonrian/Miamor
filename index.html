@@ -1,369 +1,305 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-br">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nosso Universo</title>
+<title>App Secreto</title>
 
 <style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
 
 body{
-margin:0;
-font-family:-apple-system,BlinkMacSystemFont,Segoe UI;
 background:#000;
-color:white;
+color:#fff;
 display:flex;
-align-items:center;
 justify-content:center;
+align-items:center;
 height:100vh;
-text-align:center;
 overflow:hidden;
 }
 
-.screen{
-display:none;
-flex-direction:column;
+.app{
+width:100%;
+max-width:430px;
+height:100vh;
+display:flex;
 align-items:center;
 justify-content:center;
-padding:25px;
+padding:20px;
+position:relative;
 }
 
-.active{
-display:flex;
+.card{
+width:100%;
+background:#111;
+padding:28px;
+border-radius:28px;
+box-shadow:0 20px 40px rgba(255,0,100,.15);
+animation:fade .4s ease;
+text-align:center;
+position:relative;
+}
+
+h1{font-size:22px;margin-bottom:10px;}
+p{font-size:15px;opacity:.8;margin-bottom:20px;}
+
+input{
+width:100%;
+padding:14px;
+border-radius:16px;
+border:none;
+background:#1f1f1f;
+color:#fff;
+font-size:16px;
+margin-bottom:15px;
+text-align:center;
 }
 
 button{
-background:#ff2d55;
+width:100%;
+padding:14px;
+border-radius:16px;
 border:none;
-color:white;
-padding:14px 24px;
-font-size:18px;
-border-radius:20px;
-margin:10px;
+background:#ff0066;
+color:#fff;
+font-size:16px;
+font-weight:600;
+cursor:pointer;
+transition:.2s;
+margin-bottom:10px;
 }
 
-input{
-padding:12px;
-border-radius:12px;
-border:none;
-text-align:center;
-font-size:18px;
+button:active{transform:scale(.96);}
+
+.secondary{
+background:#2a2a2a;
+width:120px;
+padding:10px;
+font-size:14px;
+margin:10px auto 0 auto;
+display:block;
+position:relative;
 }
 
-.loader{
-width:60px;
-height:60px;
-border:6px solid #ffffff30;
-border-top:6px solid #ff2d55;
-border-radius:50%;
-animation:spin 1s linear infinite;
-margin:25px;
+.progress{
+height:5px;
+background:#1f1f1f;
+border-radius:10px;
+margin-bottom:20px;
+overflow:hidden;
+}
+
+.bar{
+height:100%;
+width:0%;
+background:#ff0066;
+transition:.4s;
+}
+
+.ring{
+font-size:90px;
+cursor:pointer;
+transition:.4s;
+display:inline-block;
+}
+
+.ring.spin{
+animation:spin 2s linear infinite;
 }
 
 @keyframes spin{
-0%{transform:rotate(0)}
-100%{transform:rotate(360deg)}
-}
-
-.mapa{
-display:flex;
-align-items:center;
-gap:12px;
-margin-top:30px;
-}
-
-.ponto{
-background:#ffffff20;
-padding:10px 15px;
-border-radius:20px;
-}
-
-.destino{
-background:#ff2d55;
-cursor:pointer;
-}
-
-.linha{
-width:40px;
-height:2px;
-background:white;
-}
-
-#ring{
-font-size:90px;
-transition:0.3s;
+from{transform:rotate(0deg);}
+to{transform:rotate(360deg);}
 }
 
 img{
-max-width:260px;
-border-radius:18px;
+width:100%;
+border-radius:20px;
+margin-top:15px;
+box-shadow:0 10px 25px rgba(255,0,100,.4);
 }
 
-#nao{
-background:#333;
-position:absolute;
-font-size:16px;
-padding:10px 15px;
+@keyframes fade{
+from{opacity:0; transform:translateY(10px);}
+to{opacity:1; transform:translateY(0);}
 }
-
-.heart{
-position:absolute;
-font-size:22px;
-animation:fall 3s linear forwards;
-}
-
-@keyframes fall{
-0%{transform:translateY(-100px)}
-100%{transform:translateY(100vh)}
-}
-
 </style>
 </head>
 
 <body>
 
-<audio id="music" loop>
-<source src="perfect.mp3" type="audio/mpeg">
-</audio>
-
-<!-- SENHA -->
-
-<div id="senha" class="screen active">
-
-<h2>Digite a senha ❤️</h2>
-
-<p>Dica: algo que representa a gente</p>
-
-<input id="senhaInput">
-
-<button onclick="checkSenha()">Entrar</button>
-
-</div>
-
-<!-- LOADING -->
-
-<div id="loading" class="screen">
-
-<h2>Inicializando nosso universo</h2>
-
-<p>Carregando memórias...</p>
-<p>Buscando momentos especiais...</p>
-<p>Verificando compatibilidade...</p>
-<p>Resultado: 100% ❤️</p>
-
-<div class="loader"></div>
-
-</div>
-
-<!-- DESAFIO 1 -->
-
-<div id="desafio1" class="screen">
-
-<h2>Desafio 1</h2>
-
-<p>Diga em voz alta 3 coisas que você ama na gente</p>
-
-<button onclick="show('desafio2')">Próximo</button>
-
-</div>
-
-<!-- DESAFIO 2 -->
-
-<div id="desafio2" class="screen">
-
-<h2>Desafio 2</h2>
-
-<p>Olhe nossa primeira conversa no celular</p>
-
-<button onclick="show('desafio3')">Continuar</button>
-
-</div>
-
-<!-- DESAFIO 3 -->
-
-<div id="desafio3" class="screen">
-
-<h2>Desafio 3</h2>
-
-<p>Feche os olhos 10 segundos e pense no nosso melhor momento</p>
-
-<button onclick="show('puzzle')">Continuar</button>
-
-</div>
-
-<!-- PUZZLE -->
-
-<div id="puzzle" class="screen">
-
-<h2>Monte nossa história 🧩</h2>
-
-<p>Essa foto representa uma parte da nossa história</p>
-
-<img src="DE430CAF-0E96-48E9-B362-C36F057FDFAA.jpeg">
-
-<button onclick="show('mapa')">Continuar</button>
-
-</div>
-
-<!-- MAPA -->
-
-<div id="mapa" class="screen">
-
-<h2>Mapa do nosso destino 🧭</h2>
-
-<div class="mapa">
-
-<div class="ponto">Passado</div>
-
-<div class="linha"></div>
-
-<div class="ponto">Presente</div>
-
-<div class="linha"></div>
-
-<div class="ponto destino" onclick="abrirPedido()">Destino ❤️</div>
-
-</div>
-
-</div>
-
-<!-- PEDIDO -->
-
-<div id="pedido" class="screen">
-
-<h2>Quer namorar comigo?</h2>
-
-<button onclick="sim()">SIM</button>
-
-<button id="nao">NÃO</button>
-
-</div>
-
-<!-- ALIANÇA -->
-
-<div id="alianca" class="screen">
-
-<h2>Clique na aliança</h2>
-
-<div id="ring" onclick="clicar()">💍</div>
-
-<p id="contador">0 / 10</p>
-
-<p id="certeza"></p>
-
-</div>
-
-<!-- FINAL -->
-
-<div id="final" class="screen">
-
-<h2>Você disse SIM ❤️</h2>
-
-<img src="foto.jpg">
-
-<p>Nosso destino sempre foi um ao outro.</p>
-
+<div class="app">
+<div class="card" id="app"></div>
 </div>
 
 <script>
 
-let cliques=0
+const senhaCorreta = "amor2024"; // ALTERE
+let fase = -1;
+let cliques = 0;
 
-function show(id){
-document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"))
-document.getElementById(id).classList.add("active")
+const perguntas = [
+"Qual foi nosso primeiro encontro?",
+"Complete: Eu te ____",
+"Digite a data do nosso início (ex: 10/05/2024)",
+"Qual comida eu mais gosto?",
+"Quem é mais ciumento? (eu ou você)",
+"Qual apelido carinhoso eu te chamo?"
+];
+
+const respostas = [
+"cinema",
+"amo",
+"10/05/2024",
+"pizza",
+"eu",
+"amor"
+];
+
+iniciar();
+
+function iniciar(){
+document.getElementById("app").innerHTML = `
+<h1>🔒 Área Privada</h1>
+<p>Digite a senha para acessar.</p>
+<input type="password" id="senha">
+<button onclick="login()">Entrar</button>
+<p id="erro" style="color:#ff4d6d;"></p>
+`;
 }
 
-function checkSenha(){
-
-let senha=document.getElementById("senhaInput").value
-
-if(senha.toLowerCase()=="amor"){
-
-show("loading")
-
-document.getElementById("music").play()
-
-setTimeout(()=>{
-show("desafio1")
-},4500)
-
+function login(){
+let s = document.getElementById("senha").value;
+if(s === senhaCorreta){
+fase = 0;
+carregar();
 }else{
+document.getElementById("erro").innerText="Senha incorreta.";
+}
+}
 
-alert("Senha errada 😅")
+function carregar(){
+
+if(fase < perguntas.length){
+
+let progresso = (fase/perguntas.length)*100;
+
+document.getElementById("app").innerHTML = `
+<div class="progress"><div class="bar" style="width:${progresso}%"></div></div>
+<h1>🎮 Jogo ${fase+1}</h1>
+<p>${perguntas[fase]}</p>
+<input id="r">
+<button onclick="verificar()">Responder</button>
+`;
+
+}else if(fase === perguntas.length){
+
+document.getElementById("app").innerHTML = `
+<h1>💘 Pergunta Final</h1>
+<p>Você aceita namorar comigo oficialmente?</p>
+<button onclick="mostrarAlianca()">SIM ❤️</button>
+<button class="secondary" id="naoBtn">NÃO</button>
+`;
+
+moverBotao();
 
 }
 
+else if(fase === 100){
+
+document.getElementById("app").innerHTML = `
+<h1>💍 Selando o destino...</h1>
+<p>Clique 10 vezes na aliança</p>
+<div class="ring spin" id="ring" onclick="clicar()">💍</div>
+<p id="contador">0 / 10</p>
+`;
+
 }
 
-function abrirPedido(){
+else{
 
-navigator.vibrate(200)
-
-show("pedido")
+document.getElementById("app").innerHTML = `
+<h1>❤️ Pedido Aceito</h1>
+<p>Você desbloqueou o melhor nível da minha vida.</p>
+<img src="sua-foto.jpg">
+<p style="margin-top:15px;font-weight:600;">
+Eu escolheria você em todas as versões da minha vida.
+</p>
+`;
 
 }
+}
 
-function sim(){
+function verificar(){
+let r = document.getElementById("r").value.toLowerCase().trim();
+if(r === respostas[fase]){
+fase++;
+carregar();
+}else{
+alert("Resposta errada 😏 tenta de novo.");
+}
+}
 
-show("alianca")
-
+function mostrarAlianca(){
+fase = 100;
+carregar();
 }
 
 function clicar(){
+cliques++;
 
-cliques++
-
-navigator.vibrate(100)
-
-document.getElementById("contador").innerText=cliques+" / 10"
-
-document.getElementById("ring").style.transform="rotate("+cliques*36+"deg)"
-
-if(cliques==10){
-
-document.getElementById("certeza").innerText="Tem certeza? ❤️"
-
-setTimeout(()=>{
-show("final")
-chuva()
-},2000)
-
+if(navigator.vibrate){
+navigator.vibrate(70);
 }
 
+document.getElementById("contador").innerText = cliques + " / 10";
+
+let ring = document.getElementById("ring");
+
+if(cliques >= 3) ring.innerHTML="💍💍";
+if(cliques >= 6) ring.innerHTML="💍❤️💍";
+if(cliques >= 9) ring.innerHTML="💞";
+
+if(cliques === 10){
+
+ring.classList.remove("spin");
+
+document.getElementById("app").innerHTML = `
+<h1>💞</h1>
+<h1>Tem certeza?</h1>
+<p>Não é só um clique... é pra vida inteira.</p>
+<button onclick="final()">Tenho ❤️</button>
+`;
+
+}
 }
 
-const nao=document.getElementById("nao")
+function final(){
 
-nao.addEventListener("touchstart",mover)
-
-function mover(){
-
-let x=Math.random()*window.innerWidth-80
-let y=Math.random()*window.innerHeight-40
-
-nao.style.left=x+"px"
-nao.style.top=y+"px"
-
+if(navigator.vibrate){
+navigator.vibrate([100,50,100]);
 }
 
-function chuva(){
+fase = 999;
+carregar();
+}
 
-setInterval(()=>{
+function moverBotao(){
+const btn = document.getElementById("naoBtn");
 
-let heart=document.createElement("div")
+btn.addEventListener("touchstart", fugir);
+btn.addEventListener("mouseover", fugir);
 
-heart.className="heart"
-heart.innerText="❤️"
-
-heart.style.left=Math.random()*100+"vw"
-
-document.body.appendChild(heart)
-
-setTimeout(()=>heart.remove(),3000)
-
-},200)
-
+function fugir(){
+btn.style.position="absolute";
+btn.style.left=Math.random()*60+"%";
+btn.style.top=Math.random()*60+"%";
+}
 }
 
 </script>
