@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>App Secreto</title>
 
 <style>
@@ -20,6 +20,7 @@ display:flex;
 justify-content:center;
 align-items:center;
 height:100vh;
+overflow:hidden;
 }
 
 .app{
@@ -30,6 +31,7 @@ display:flex;
 align-items:center;
 justify-content:center;
 padding:20px;
+position:relative;
 }
 
 .card{
@@ -38,19 +40,13 @@ background:#111;
 padding:28px;
 border-radius:28px;
 box-shadow:0 20px 40px rgba(255,0,100,.15);
-animation:fade .5s ease;
+animation:fade .4s ease;
+text-align:center;
+position:relative;
 }
 
-h1{
-font-size:22px;
-margin-bottom:10px;
-}
-
-p{
-font-size:15px;
-opacity:.7;
-margin-bottom:20px;
-}
+h1{font-size:22px;margin-bottom:10px;}
+p{font-size:15px;opacity:.75;margin-bottom:20px;}
 
 input{
 width:100%;
@@ -78,12 +74,16 @@ transition:.2s;
 margin-bottom:10px;
 }
 
-button:active{
-transform:scale(.96);
-}
+button:active{transform:scale(.96);}
 
 .secondary{
 background:#2a2a2a;
+width:120px;
+padding:10px;
+font-size:14px;
+margin:10px auto 0 auto;
+display:block;
+position:relative;
 }
 
 .progress{
@@ -106,6 +106,16 @@ width:100%;
 border-radius:20px;
 margin-top:15px;
 box-shadow:0 10px 25px rgba(255,0,100,.4);
+}
+
+.ring{
+font-size:80px;
+cursor:pointer;
+transition:.2s;
+}
+
+.ring:active{
+transform:scale(1.2);
 }
 
 @keyframes fade{
@@ -131,8 +141,10 @@ to{opacity:1; transform:translateY(0);}
 
 <script>
 
-const senhaCorreta = "amor2024"; // ALTERE AQUI
+const senhaCorreta = "amor2024";
 let fase = 0;
+let cliquesAlianca = 0;
+const totalFases = 7;
 
 function login(){
 let s = document.getElementById("senha").value;
@@ -146,51 +158,63 @@ document.getElementById("erro").innerText="Senha incorreta.";
 
 function carregar(){
 const app = document.getElementById("app");
+let progresso = (fase/totalFases)*100;
 
-let progresso = (fase/4)*100;
+if(fase < 6){
 
-if(fase === 0){
+const perguntas = [
+"Qual foi nosso primeiro encontro?",
+"Complete: Eu te ____",
+"Digite a data do nosso início (ex: 10/05/2024)",
+"Qual comida eu mais gosto?",
+"Quem é mais ciumento? (eu ou você)",
+"Qual apelido carinhoso eu te chamo?"
+];
+
+const respostas = [
+"cinema",
+"amo",
+"10/05/2024",
+"pizza",
+"eu",
+"amor"
+];
+
 app.innerHTML=`
 <div class="progress"><div class="bar" style="width:${progresso}%"></div></div>
-<h1>🎮 Jogo 1</h1>
-<p>Qual foi nosso primeiro encontro?</p>
+<h1>🎮 Jogo ${fase+1}</h1>
+<p>${perguntas[fase]}</p>
 <input id="r">
-<button onclick="verificar('cinema')">Responder</button>
+<button onclick="verificar('${respostas[fase]}')">Responder</button>
 `;
-}
 
-else if(fase === 1){
-app.innerHTML=`
-<div class="progress"><div class="bar" style="width:${progresso}%"></div></div>
-<h1>🎮 Jogo 2</h1>
-<p>Complete: Eu te ____</p>
-<input id="r">
-<button onclick="verificar('amo')">Responder</button>
-`;
-}
+}else if(fase === 6){
 
-else if(fase === 2){
-app.innerHTML=`
-<div class="progress"><div class="bar" style="width:${progresso}%"></div></div>
-<h1>🎮 Jogo 3</h1>
-<p>Digite a data do nosso início (ex: 10/05/2024)</p>
-<input id="r">
-<button onclick="verificar('10/05/2024')">Responder</button>
-`;
-}
-
-else if(fase === 3){
 app.innerHTML=`
 <div class="progress"><div class="bar" style="width:100%"></div></div>
 <h1>💘 Pergunta Final</h1>
 <p>Você aceita namorar comigo oficialmente?</p>
-<button onclick="aceitou()">SIM ❤️</button>
+<button onclick="mostrarAlianca()">SIM ❤️</button>
 <button class="secondary" id="naoBtn">NÃO</button>
 `;
+
 moverBotao();
+
+}
+
+else if(fase === 7){
+
+app.innerHTML=`
+<h1>💍 Toque na aliança</h1>
+<p>Clique 4 vezes para selar nosso destino.</p>
+<div class="ring" onclick="clicarAlianca()">💍</div>
+<p id="contador"></p>
+`;
+
 }
 
 else{
+
 app.innerHTML=`
 <h1>❤️ Pedido Aceito</h1>
 <p>Você desbloqueou o melhor nível da minha vida.</p>
@@ -199,7 +223,9 @@ app.innerHTML=`
 Eu escolheria você em todas as versões da minha vida.
 </p>
 `;
+
 }
+
 }
 
 function verificar(correta){
@@ -212,9 +238,20 @@ alert("Resposta errada 😏 tenta de novo.");
 }
 }
 
-function aceitou(){
-fase++;
+function mostrarAlianca(){
+fase = 7;
 carregar();
+}
+
+function clicarAlianca(){
+cliquesAlianca++;
+document.getElementById("contador").innerText =
+`Você já selou ${cliquesAlianca}/4 💕`;
+
+if(cliquesAlianca >= 4){
+fase = 8;
+carregar();
+}
 }
 
 function moverBotao(){
@@ -226,8 +263,8 @@ btn.addEventListener("mouseover", fugir);
 function fugir(){
 const btn = document.getElementById("naoBtn");
 btn.style.position="absolute";
-btn.style.left=Math.random()*70+"%";
-btn.style.top=Math.random()*70+"%";
+btn.style.left=Math.random()*60+"%";
+btn.style.top=Math.random()*60+"%";
 }
 
 </script>
