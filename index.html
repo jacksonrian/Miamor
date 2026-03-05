@@ -3,20 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nosso Universo ❤️</title>
+<title>Nosso Universo</title>
 
 <style>
 
 body{
 margin:0;
-font-family:-apple-system,BlinkMacSystemFont;
+font-family:-apple-system,BlinkMacSystemFont,Segoe UI;
 background:#000;
 color:white;
-text-align:center;
 display:flex;
-justify-content:center;
 align-items:center;
+justify-content:center;
 height:100vh;
+text-align:center;
 overflow:hidden;
 }
 
@@ -25,7 +25,7 @@ display:none;
 flex-direction:column;
 align-items:center;
 justify-content:center;
-padding:30px;
+padding:25px;
 }
 
 .active{
@@ -36,15 +36,15 @@ button{
 background:#ff2d55;
 border:none;
 color:white;
-padding:15px 25px;
-border-radius:20px;
+padding:14px 24px;
 font-size:18px;
-margin-top:20px;
+border-radius:20px;
+margin:10px;
 }
 
 input{
 padding:12px;
-border-radius:10px;
+border-radius:12px;
 border:none;
 text-align:center;
 font-size:18px;
@@ -57,7 +57,7 @@ border:6px solid #ffffff30;
 border-top:6px solid #ff2d55;
 border-radius:50%;
 animation:spin 1s linear infinite;
-margin:20px auto;
+margin:25px;
 }
 
 @keyframes spin{
@@ -68,7 +68,7 @@ margin:20px auto;
 .mapa{
 display:flex;
 align-items:center;
-gap:10px;
+gap:12px;
 margin-top:30px;
 }
 
@@ -80,6 +80,7 @@ border-radius:20px;
 
 .destino{
 background:#ff2d55;
+cursor:pointer;
 }
 
 .linha{
@@ -88,18 +89,32 @@ height:2px;
 background:white;
 }
 
+#ring{
+font-size:90px;
+transition:0.3s;
+}
+
 img{
-max-width:250px;
-border-radius:20px;
+max-width:260px;
+border-radius:18px;
 }
 
 #nao{
-background:#444;
+background:#333;
+position:absolute;
+font-size:16px;
+padding:10px 15px;
 }
 
-#ring{
-font-size:80px;
-transition:0.3s;
+.heart{
+position:absolute;
+font-size:22px;
+animation:fall 3s linear forwards;
+}
+
+@keyframes fall{
+0%{transform:translateY(-100px)}
+100%{transform:translateY(100vh)}
 }
 
 </style>
@@ -116,6 +131,8 @@ transition:0.3s;
 <div id="senha" class="screen active">
 
 <h2>Digite a senha ❤️</h2>
+
+<p>Dica: algo que representa a gente</p>
 
 <input id="senhaInput">
 
@@ -138,15 +155,39 @@ transition:0.3s;
 
 </div>
 
-<!-- DESAFIO -->
+<!-- DESAFIO 1 -->
 
-<div id="desafio" class="screen">
+<div id="desafio1" class="screen">
 
-<h2>Desafio</h2>
+<h2>Desafio 1</h2>
 
 <p>Diga em voz alta 3 coisas que você ama na gente</p>
 
-<button onclick="show('puzzle')">Próximo</button>
+<button onclick="show('desafio2')">Próximo</button>
+
+</div>
+
+<!-- DESAFIO 2 -->
+
+<div id="desafio2" class="screen">
+
+<h2>Desafio 2</h2>
+
+<p>Olhe nossa primeira conversa no celular</p>
+
+<button onclick="show('desafio3')">Continuar</button>
+
+</div>
+
+<!-- DESAFIO 3 -->
+
+<div id="desafio3" class="screen">
+
+<h2>Desafio 3</h2>
+
+<p>Feche os olhos 10 segundos e pense no nosso melhor momento</p>
+
+<button onclick="show('puzzle')">Continuar</button>
 
 </div>
 
@@ -156,9 +197,9 @@ transition:0.3s;
 
 <h2>Monte nossa história 🧩</h2>
 
-<p>Quando terminar clique em continuar</p>
+<p>Essa foto representa uma parte da nossa história</p>
 
-<img src="DE430CAF-0E96-48E9-B362-C36F057FDFAA.jpeg">
+<img src="foto.jpg">
 
 <button onclick="show('mapa')">Continuar</button>
 
@@ -180,7 +221,7 @@ transition:0.3s;
 
 <div class="linha"></div>
 
-<div class="ponto destino" onclick="show('pedido')">Destino</div>
+<div class="ponto destino" onclick="abrirPedido()">Destino ❤️</div>
 
 </div>
 
@@ -192,7 +233,7 @@ transition:0.3s;
 
 <h2>Quer namorar comigo?</h2>
 
-<button onclick="aceitou()">SIM</button>
+<button onclick="sim()">SIM</button>
 
 <button id="nao">NÃO</button>
 
@@ -206,7 +247,9 @@ transition:0.3s;
 
 <div id="ring" onclick="clicar()">💍</div>
 
-<p id="cliques">0 / 10</p>
+<p id="contador">0 / 10</p>
+
+<p id="certeza"></p>
 
 </div>
 
@@ -224,41 +267,44 @@ transition:0.3s;
 
 <script>
 
-let cliques = 0
+let cliques=0
 
 function show(id){
-
-document.querySelectorAll(".screen")
-.forEach(s=>s.classList.remove("active"))
-
-document.getElementById(id)
-.classList.add("active")
-
+document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"))
+document.getElementById(id).classList.add("active")
 }
 
 function checkSenha(){
 
-let senha = document
-.getElementById("senhaInput")
-.value
+let senha=document.getElementById("senhaInput").value
 
-if(senha=="amor"){
+if(senha.toLowerCase()=="amor"){
 
 show("loading")
 
-document
-.getElementById("music")
-.play()
+document.getElementById("music").play()
 
 setTimeout(()=>{
-show("desafio")
-},4000)
+show("desafio1")
+},4500)
+
+}else{
+
+alert("Senha errada 😅")
 
 }
 
 }
 
-function aceitou(){
+function abrirPedido(){
+
+navigator.vibrate(200)
+
+show("pedido")
+
+}
+
+function sim(){
 
 show("alianca")
 
@@ -270,15 +316,53 @@ cliques++
 
 navigator.vibrate(100)
 
-document
-.getElementById("cliques")
-.innerText = cliques + " / 10"
+document.getElementById("contador").innerText=cliques+" / 10"
 
-if(cliques>=10){
+document.getElementById("ring").style.transform="rotate("+cliques*36+"deg)"
 
+if(cliques==10){
+
+document.getElementById("certeza").innerText="Tem certeza? ❤️"
+
+setTimeout(()=>{
 show("final")
+chuva()
+},2000)
 
 }
+
+}
+
+const nao=document.getElementById("nao")
+
+nao.addEventListener("touchstart",mover)
+
+function mover(){
+
+let x=Math.random()*window.innerWidth-80
+let y=Math.random()*window.innerHeight-40
+
+nao.style.left=x+"px"
+nao.style.top=y+"px"
+
+}
+
+function chuva(){
+
+setInterval(()=>{
+
+let heart=document.createElement("div")
+
+heart.className="heart"
+heart.innerText="❤️"
+
+heart.style.left=Math.random()*100+"vw"
+
+document.body.appendChild(heart)
+
+setTimeout(()=>heart.remove(),3000)
+
+},200)
 
 }
 
