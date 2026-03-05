@@ -2,198 +2,174 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>App Secreto</title>
+<title>Missão Secreta ❤️</title>
 
 <style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-}
-
 body{
-background:#000;
-color:#fff;
+margin:0;
+font-family:Arial, Helvetica, sans-serif;
+background:linear-gradient(to bottom,#000000,#1a001a);
+color:white;
 display:flex;
 justify-content:center;
 align-items:center;
 height:100vh;
 overflow:hidden;
-}
-
-.app{
-width:100%;
-max-width:430px;
-height:100vh;
-display:flex;
-align-items:center;
-justify-content:center;
-padding:20px;
-}
-
-.card{
-width:100%;
-background:#111;
-padding:28px;
-border-radius:28px;
-box-shadow:0 20px 40px rgba(255,0,100,.15);
-animation:fade .4s ease;
 text-align:center;
-position:relative;
 }
 
-h1{font-size:22px;margin-bottom:10px;}
-p{font-size:15px;opacity:.8;margin-bottom:20px;}
+.container{
+max-width:400px;
+padding:20px;
+animation:fade 0.8s;
+}
+
+input{
+padding:10px;
+border-radius:20px;
+border:none;
+text-align:center;
+margin-top:15px;
+}
 
 button{
-width:100%;
-padding:14px;
-border-radius:16px;
-border:none;
+padding:12px 25px;
 background:#ff0066;
-color:#fff;
-font-size:16px;
-font-weight:600;
+border:none;
+color:white;
+border-radius:25px;
 cursor:pointer;
-transition:.2s;
-margin-bottom:10px;
+margin-top:15px;
+transition:0.3s;
 }
 
-.secondary{
-background:#2a2a2a;
-width:120px;
-padding:10px;
-font-size:14px;
-margin:10px auto 0 auto;
-display:block;
-position:relative;
-}
-
-.ring{
-font-size:90px;
-cursor:pointer;
-transition:.4s;
-display:inline-block;
-}
-
-.ring.girar{
-animation:giro 1s linear infinite;
-}
-
-@keyframes giro{
-from{transform:rotate(0deg);}
-to{transform:rotate(360deg);}
-}
-
-.fade{
-animation:fade .4s ease;
+button:hover{
+background:#ff3385;
+transform:scale(1.1);
 }
 
 img{
-width:100%;
+width:280px;
 border-radius:20px;
-margin-top:15px;
-box-shadow:0 10px 25px rgba(255,0,100,.4);
+margin-top:20px;
+box-shadow:0px 0px 20px #ff0066;
 }
 
 @keyframes fade{
-from{opacity:0; transform:translateY(10px);}
+from{opacity:0; transform:translateY(20px);}
 to{opacity:1; transform:translateY(0);}
+}
+
+.heart{
+position:absolute;
+color:#ff0066;
+animation:fall linear infinite;
+}
+
+@keyframes fall{
+0%{transform:translateY(-10vh);}
+100%{transform:translateY(110vh);}
 }
 </style>
 </head>
 
 <body>
 
-<div class="app">
-<div class="card fade" id="app">
-
-<h1>💘 Pergunta Final</h1>
-<p>Você aceita namorar comigo oficialmente?</p>
-<button onclick="mostrarAlianca()">SIM ❤️</button>
-<button class="secondary" id="naoBtn">NÃO</button>
-
-</div>
+<div class="container" id="game">
+<h1>🔒 Área Secreta</h1>
+<p>Digite a senha para começar a missão...</p>
+<input type="password" id="senha" placeholder="Digite a senha">
+<br>
+<button onclick="checkSenha()">Entrar</button>
+<p id="erro" style="color:red;"></p>
 </div>
 
 <script>
 
-let cliques = 0;
+const senhaCorreta = "amor2024"; // MUDE AQUI A SENHA
 
-function mostrarAlianca(){
-document.getElementById("app").innerHTML = `
-<h1>💍 Selando o destino...</h1>
-<p>Clique 10 vezes na aliança</p>
-<div class="ring girar" id="ring" onclick="clicar()">💍</div>
-<p id="contador">0 / 10</p>
-`;
-}
+let fase = 0;
 
-function clicar(){
-cliques++;
-
-if(navigator.vibrate){
-navigator.vibrate(80);
-}
-
-document.getElementById("contador").innerText = cliques + " / 10";
-
-let ring = document.getElementById("ring");
-
-/* Evolução visual */
-if(cliques >= 3){
-ring.innerHTML = "💍💍";
-}
-if(cliques >= 6){
-ring.innerHTML = "💍❤️💍";
-}
-if(cliques >= 9){
-ring.innerHTML = "💞";
-}
-
-if(cliques === 10){
-
-ring.classList.remove("girar");
-
-document.getElementById("app").innerHTML = `
-<h1 style="font-size:26px;">💞</h1>
-<h1>Tem certeza?</h1>
-<p style="opacity:.9;margin-top:10px;">
-Não é só um clique... é pra vida inteira.
-</p>
-<button onclick="final()">Tenho ❤️</button>
-`;
-
+function checkSenha(){
+let senha = document.getElementById("senha").value;
+if(senha === senhaCorreta){
+startGame();
+}else{
+document.getElementById("erro").innerText = "Senha incorreta... tente novamente ❤️";
 }
 }
 
-function final(){
-if(navigator.vibrate){
-navigator.vibrate([100,50,100]);
+function startGame(){
+nextFase();
 }
 
-document.getElementById("app").innerHTML = `
-<h1>❤️ Pedido Aceito</h1>
-<p>Você desbloqueou o melhor nível da minha vida.</p>
+function nextFase(){
+const game = document.getElementById("game");
+game.style.animation="none";
+void game.offsetWidth;
+game.style.animation="fade 0.8s";
+
+const fases = [
+
+`
+<h1>🎮 Fase 1</h1>
+<p>Qual foi o lugar do nosso primeiro encontro?</p>
+<input id="resposta">
+<br>
+<button onclick="verificarResposta('resposta','cinema')">Responder</button>
+`,
+
+`
+<h1>🎮 Fase 2</h1>
+<p>Quem disse "eu te amo" primeiro?</p>
+<input id="resposta">
+<br>
+<button onclick="verificarResposta('resposta','eu')">Responder</button>
+`,
+
+`
+<h1>🎮 Fase 3</h1>
+<p>Qual música lembra a gente?</p>
+<input id="resposta">
+<br>
+<button onclick="verificarResposta('resposta','nossa musica')">Responder</button>
+`,
+
+`
+<h1>❤️ Missão Completa</h1>
+<p>Você zerou o jogo do nosso amor.</p>
 <img src="sua-foto.jpg">
-<p style="margin-top:15px;font-weight:600;">
-Eu escolheria você em todas as versões da minha vida.
-</p>
-`;
+<h2>Eu escolheria você em todas as vidas.</h2>
+`
+];
+
+game.innerHTML = fases[fase];
 }
 
-/* Botão NÃO fugindo */
-const btn = document.getElementById("naoBtn");
-btn.addEventListener("touchstart", fugir);
-btn.addEventListener("mouseover", fugir);
+function verificarResposta(id, correta){
+let resposta = document.getElementById(id).value.toLowerCase();
 
-function fugir(){
-btn.style.position="absolute";
-btn.style.left=Math.random()*60+"%";
-btn.style.top=Math.random()*60+"%";
+if(resposta === correta){
+fase++;
+nextFase();
+}else{
+alert("Resposta errada 😏 tenta de novo!");
 }
+}
+
+// Corações caindo
+function createHeart(){
+const heart = document.createElement("div");
+heart.classList.add("heart");
+heart.innerHTML="❤";
+heart.style.left=Math.random()*100+"vw";
+heart.style.animationDuration=(Math.random()*3+2)+"s";
+heart.style.fontSize=(Math.random()*20+10)+"px";
+document.body.appendChild(heart);
+setTimeout(()=>{heart.remove();},5000);
+}
+
+setInterval(createHeart,300);
 
 </script>
 
