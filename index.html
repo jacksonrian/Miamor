@@ -2,13 +2,13 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<title>Desafio do Amor ❤️</title>
+<title>Missão Secreta ❤️</title>
 
 <style>
 body{
 margin:0;
 font-family:Arial, Helvetica, sans-serif;
-background: linear-gradient(to bottom, #000000, #1a001a);
+background:linear-gradient(to bottom,#000000,#1a001a);
 color:white;
 display:flex;
 justify-content:center;
@@ -21,19 +21,26 @@ text-align:center;
 .container{
 max-width:400px;
 padding:20px;
-animation:fade 1s;
+animation:fade 0.8s;
+}
+
+input{
+padding:10px;
+border-radius:20px;
+border:none;
+text-align:center;
+margin-top:15px;
 }
 
 button{
-padding:15px 30px;
+padding:12px 25px;
 background:#ff0066;
 border:none;
 color:white;
-font-size:18px;
-border-radius:30px;
+border-radius:25px;
 cursor:pointer;
+margin-top:15px;
 transition:0.3s;
-margin-top:20px;
 }
 
 button:hover{
@@ -68,47 +75,86 @@ animation:fall linear infinite;
 
 <body>
 
-<div class="container" id="content">
-<h1>Você aceita o desafio do amor? ❤️</h1>
-<p>Prepare seu coração...</p>
-<button onclick="nextStep()">Começar</button>
+<div class="container" id="game">
+<h1>🔒 Área Secreta</h1>
+<p>Digite a senha para começar a missão...</p>
+<input type="password" id="senha" placeholder="Digite a senha">
+<br>
+<button onclick="checkSenha()">Entrar</button>
+<p id="erro" style="color:red;"></p>
 </div>
 
 <script>
-let step = 0;
 
-const steps = [
+const senhaCorreta = "amor2024"; // MUDE AQUI A SENHA
+
+let fase = 0;
+
+function checkSenha(){
+let senha = document.getElementById("senha").value;
+if(senha === senhaCorreta){
+startGame();
+}else{
+document.getElementById("erro").innerText = "Senha incorreta... tente novamente ❤️";
+}
+}
+
+function startGame(){
+nextFase();
+}
+
+function nextFase(){
+const game = document.getElementById("game");
+game.style.animation="none";
+void game.offsetWidth;
+game.style.animation="fade 0.8s";
+
+const fases = [
+
 `
-<h1>Desafio 1 💕</h1>
-<p>Vá até o espelho e diga 3 qualidades suas em voz alta.</p>
-<button onclick="nextStep()">Próximo</button>
+<h1>🎮 Fase 1</h1>
+<p>Qual foi o lugar do nosso primeiro encontro?</p>
+<input id="resposta">
+<br>
+<button onclick="verificarResposta('resposta','cinema')">Responder</button>
 `,
+
 `
-<h1>Desafio 2 ❤️</h1>
-<p>Abra nossa primeira conversa e releia a primeira mensagem que eu te enviei.</p>
-<button onclick="nextStep()">Continuar</button>
+<h1>🎮 Fase 2</h1>
+<p>Quem disse "eu te amo" primeiro?</p>
+<input id="resposta">
+<br>
+<button onclick="verificarResposta('resposta','eu')">Responder</button>
 `,
+
 `
-<h1>Desafio 3 🔥</h1>
-<p>Feche os olhos por 10 segundos e pense no nosso momento mais especial.</p>
-<button onclick="nextStep()">Última etapa</button>
+<h1>🎮 Fase 3</h1>
+<p>Qual música lembra a gente?</p>
+<input id="resposta">
+<br>
+<button onclick="verificarResposta('resposta','nossa musica')">Responder</button>
 `,
+
 `
-<h1>Se cada desafio foi especial...</h1>
-<p>Imagina o resto da nossa vida juntos. ❤️</p>
-<img src="sua-foto.jpg" alt="Nós dois">
-<h2>Eu escolheria você em todas as versões da minha vida.</h2>
+<h1>❤️ Missão Completa</h1>
+<p>Você zerou o jogo do nosso amor.</p>
+<img src="sua-foto.jpg">
+<h2>Eu escolheria você em todas as vidas.</h2>
 `
 ];
 
-function nextStep(){
-const content = document.getElementById("content");
-content.style.animation="none";
-void content.offsetWidth;
-content.style.animation="fade 1s";
+game.innerHTML = fases[fase];
+}
 
-content.innerHTML = steps[step];
-step++;
+function verificarResposta(id, correta){
+let resposta = document.getElementById(id).value.toLowerCase();
+
+if(resposta === correta){
+fase++;
+nextFase();
+}else{
+alert("Resposta errada 😏 tenta de novo!");
+}
 }
 
 // Corações caindo
@@ -120,11 +166,11 @@ heart.style.left=Math.random()*100+"vw";
 heart.style.animationDuration=(Math.random()*3+2)+"s";
 heart.style.fontSize=(Math.random()*20+10)+"px";
 document.body.appendChild(heart);
-
 setTimeout(()=>{heart.remove();},5000);
 }
 
 setInterval(createHeart,300);
+
 </script>
 
 </body>
