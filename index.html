@@ -2,20 +2,20 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Missão Secreta</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>App Secreto</title>
 
 <style>
 *{
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
 }
 
 body{
-background:linear-gradient(180deg,#0f0f0f,#1c001c);
-color:white;
+background:#000;
+color:#fff;
 display:flex;
 justify-content:center;
 align-items:center;
@@ -24,19 +24,20 @@ height:100vh;
 
 .app{
 width:100%;
-max-width:420px;
+max-width:430px;
 height:100vh;
-padding:25px;
 display:flex;
-flex-direction:column;
+align-items:center;
 justify-content:center;
+padding:20px;
 }
 
 .card{
-background:#1a1a1a;
-padding:25px;
-border-radius:20px;
-box-shadow:0 0 25px rgba(255,0,100,0.2);
+width:100%;
+background:#111;
+padding:28px;
+border-radius:28px;
+box-shadow:0 20px 40px rgba(255,0,100,.15);
 animation:fade .5s ease;
 }
 
@@ -47,49 +48,53 @@ margin-bottom:10px;
 
 p{
 font-size:15px;
-opacity:.8;
+opacity:.7;
 margin-bottom:20px;
 }
 
 input{
 width:100%;
 padding:14px;
-border-radius:14px;
+border-radius:16px;
 border:none;
-outline:none;
-background:#2a2a2a;
-color:white;
-margin-bottom:15px;
+background:#1f1f1f;
+color:#fff;
 font-size:16px;
+margin-bottom:15px;
 text-align:center;
 }
 
 button{
 width:100%;
 padding:14px;
-border-radius:14px;
+border-radius:16px;
 border:none;
 background:#ff0066;
-color:white;
+color:#fff;
 font-size:16px;
-font-weight:bold;
+font-weight:600;
 cursor:pointer;
 transition:.2s;
+margin-bottom:10px;
 }
 
 button:active{
-transform:scale(.97);
+transform:scale(.96);
+}
+
+.secondary{
+background:#2a2a2a;
 }
 
 .progress{
-height:6px;
-background:#2a2a2a;
+height:5px;
+background:#1f1f1f;
 border-radius:10px;
 margin-bottom:20px;
 overflow:hidden;
 }
 
-.progress-bar{
+.bar{
 height:100%;
 width:0%;
 background:#ff0066;
@@ -98,19 +103,13 @@ transition:.4s;
 
 img{
 width:100%;
-border-radius:18px;
+border-radius:20px;
 margin-top:15px;
-box-shadow:0 0 20px rgba(255,0,100,.5);
-}
-
-.error{
-color:#ff4d6d;
-font-size:14px;
-margin-top:10px;
+box-shadow:0 10px 25px rgba(255,0,100,.4);
 }
 
 @keyframes fade{
-from{opacity:0; transform:translateY(15px);}
+from{opacity:0; transform:translateY(10px);}
 to{opacity:1; transform:translateY(0);}
 }
 </style>
@@ -119,13 +118,13 @@ to{opacity:1; transform:translateY(0);}
 <body>
 
 <div class="app">
-<div class="card" id="appContent">
+<div class="card" id="app">
 
 <h1>🔒 Área Privada</h1>
 <p>Digite a senha para acessar.</p>
 <input type="password" id="senha" placeholder="Senha">
-<button onclick="verificarSenha()">Entrar</button>
-<div class="error" id="erro"></div>
+<button onclick="login()">Entrar</button>
+<p id="erro" style="color:#ff4d6d;"></p>
 
 </div>
 </div>
@@ -133,75 +132,102 @@ to{opacity:1; transform:translateY(0);}
 <script>
 
 const senhaCorreta = "amor2024"; // ALTERE AQUI
-
 let fase = 0;
 
-const fases = [
-{
-pergunta:"Qual foi o lugar do nosso primeiro encontro?",
-resposta:"cinema"
-},
-{
-pergunta:"Quem disse 'eu te amo' primeiro?",
-resposta:"eu"
-},
-{
-pergunta:"Qual música é a nossa música?",
-resposta:"nossa musica"
-}
-];
-
-function verificarSenha(){
-let senha = document.getElementById("senha").value;
-
-if(senha === senhaCorreta){
-fase = 0;
-carregarFase();
+function login(){
+let s = document.getElementById("senha").value;
+if(s === senhaCorreta){
+fase=0;
+carregar();
 }else{
-document.getElementById("erro").innerText = "Senha incorreta.";
+document.getElementById("erro").innerText="Senha incorreta.";
 }
 }
 
-function carregarFase(){
-const app = document.getElementById("appContent");
+function carregar(){
+const app = document.getElementById("app");
 
-if(fase < fases.length){
+let progresso = (fase/4)*100;
 
-app.innerHTML = `
-<div class="progress">
-<div class="progress-bar" style="width:${(fase/fases.length)*100}%"></div>
-</div>
-<h1>Fase ${fase+1}</h1>
-<p>${fases[fase].pergunta}</p>
-<input id="resposta" placeholder="Digite sua resposta">
-<button onclick="verificarResposta()">Responder</button>
-<div class="error" id="erroResposta"></div>
+if(fase === 0){
+app.innerHTML=`
+<div class="progress"><div class="bar" style="width:${progresso}%"></div></div>
+<h1>🎮 Jogo 1</h1>
+<p>Qual foi nosso primeiro encontro?</p>
+<input id="r">
+<button onclick="verificar('cinema')">Responder</button>
 `;
+}
 
-}else{
-app.innerHTML = `
-<div class="progress">
-<div class="progress-bar" style="width:100%"></div>
-</div>
-<h1>Missão Completa ❤️</h1>
-<p>Você desbloqueou o nível final do nosso amor.</p>
+else if(fase === 1){
+app.innerHTML=`
+<div class="progress"><div class="bar" style="width:${progresso}%"></div></div>
+<h1>🎮 Jogo 2</h1>
+<p>Complete: Eu te ____</p>
+<input id="r">
+<button onclick="verificar('amo')">Responder</button>
+`;
+}
+
+else if(fase === 2){
+app.innerHTML=`
+<div class="progress"><div class="bar" style="width:${progresso}%"></div></div>
+<h1>🎮 Jogo 3</h1>
+<p>Digite a data do nosso início (ex: 10/05/2024)</p>
+<input id="r">
+<button onclick="verificar('10/05/2024')">Responder</button>
+`;
+}
+
+else if(fase === 3){
+app.innerHTML=`
+<div class="progress"><div class="bar" style="width:100%"></div></div>
+<h1>💘 Pergunta Final</h1>
+<p>Você aceita namorar comigo oficialmente?</p>
+<button onclick="aceitou()">SIM ❤️</button>
+<button class="secondary" id="naoBtn">NÃO</button>
+`;
+moverBotao();
+}
+
+else{
+app.innerHTML=`
+<h1>❤️ Pedido Aceito</h1>
+<p>Você desbloqueou o melhor nível da minha vida.</p>
 <img src="sua-foto.jpg">
-<p style="margin-top:15px;font-weight:bold;">
+<p style="margin-top:15px;font-weight:600;">
 Eu escolheria você em todas as versões da minha vida.
 </p>
 `;
 }
 }
 
-function verificarResposta(){
-let resposta = document.getElementById("resposta").value.toLowerCase().trim();
-
-if(resposta === fases[fase].resposta){
+function verificar(correta){
+let r = document.getElementById("r").value.toLowerCase().trim();
+if(r === correta){
 fase++;
-carregarFase();
+carregar();
 }else{
-document.getElementById("erroResposta").innerText = "Resposta errada 😏 tenta de novo.";
+alert("Resposta errada 😏 tenta de novo.");
 }
+}
+
+function aceitou(){
+fase++;
+carregar();
+}
+
+function moverBotao(){
+const btn = document.getElementById("naoBtn");
+btn.addEventListener("touchstart", fugir);
+btn.addEventListener("mouseover", fugir);
+}
+
+function fugir(){
+const btn = document.getElementById("naoBtn");
+btn.style.position="absolute";
+btn.style.left=Math.random()*70+"%";
+btn.style.top=Math.random()*70+"%";
 }
 
 </script>
