@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Desafio do Amor ❤️</title>
+
+<style>
+body{
+margin:0;
+font-family:Arial, Helvetica, sans-serif;
+background: linear-gradient(to bottom, #000000, #1a001a);
+color:white;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+overflow:hidden;
+text-align:center;
+}
+
+.container{
+max-width:400px;
+padding:20px;
+animation:fade 1s;
+}
+
+button{
+padding:15px 30px;
+background:#ff0066;
+border:none;
+color:white;
+font-size:18px;
+border-radius:30px;
+cursor:pointer;
+transition:0.3s;
+margin-top:20px;
+}
+
+button:hover{
+background:#ff3385;
+transform:scale(1.1);
+}
+
+img{
+width:280px;
+border-radius:20px;
+margin-top:20px;
+box-shadow:0px 0px 20px #ff0066;
+}
+
+@keyframes fade{
+from{opacity:0; transform:translateY(20px);}
+to{opacity:1; transform:translateY(0);}
+}
+
+.heart{
+position:absolute;
+color:#ff0066;
+animation:fall linear infinite;
+}
+
+@keyframes fall{
+0%{transform:translateY(-10vh);}
+100%{transform:translateY(110vh);}
+}
+</style>
+</head>
+
+<body>
+
+<div class="container" id="content">
+<h1>Você aceita o desafio do amor? ❤️</h1>
+<p>Prepare seu coração...</p>
+<button onclick="nextStep()">Começar</button>
+</div>
+
+<script>
+let step = 0;
+
+const steps = [
+`
+<h1>Desafio 1 💕</h1>
+<p>Vá até o espelho e diga 3 qualidades suas em voz alta.</p>
+<button onclick="nextStep()">Próximo</button>
+`,
+`
+<h1>Desafio 2 ❤️</h1>
+<p>Abra nossa primeira conversa e releia a primeira mensagem que eu te enviei.</p>
+<button onclick="nextStep()">Continuar</button>
+`,
+`
+<h1>Desafio 3 🔥</h1>
+<p>Feche os olhos por 10 segundos e pense no nosso momento mais especial.</p>
+<button onclick="nextStep()">Última etapa</button>
+`,
+`
+<h1>Se cada desafio foi especial...</h1>
+<p>Imagina o resto da nossa vida juntos. ❤️</p>
+<img src="sua-foto.jpg" alt="Nós dois">
+<h2>Eu escolheria você em todas as versões da minha vida.</h2>
+`
+];
+
+function nextStep(){
+const content = document.getElementById("content");
+content.style.animation="none";
+void content.offsetWidth;
+content.style.animation="fade 1s";
+
+content.innerHTML = steps[step];
+step++;
+}
+
+// Corações caindo
+function createHeart(){
+const heart = document.createElement("div");
+heart.classList.add("heart");
+heart.innerHTML="❤";
+heart.style.left=Math.random()*100+"vw";
+heart.style.animationDuration=(Math.random()*3+2)+"s";
+heart.style.fontSize=(Math.random()*20+10)+"px";
+document.body.appendChild(heart);
+
+setTimeout(()=>{heart.remove();},5000);
+}
+
+setInterval(createHeart,300);
+</script>
+
+</body>
+</html>
