@@ -2,174 +2,207 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<title>Missão Secreta ❤️</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Missão Secreta</title>
 
 <style>
-body{
+*{
 margin:0;
-font-family:Arial, Helvetica, sans-serif;
-background:linear-gradient(to bottom,#000000,#1a001a);
+padding:0;
+box-sizing:border-box;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+
+body{
+background:linear-gradient(180deg,#0f0f0f,#1c001c);
 color:white;
 display:flex;
 justify-content:center;
 align-items:center;
 height:100vh;
-overflow:hidden;
-text-align:center;
 }
 
-.container{
-max-width:400px;
-padding:20px;
-animation:fade 0.8s;
+.app{
+width:100%;
+max-width:420px;
+height:100vh;
+padding:25px;
+display:flex;
+flex-direction:column;
+justify-content:center;
+}
+
+.card{
+background:#1a1a1a;
+padding:25px;
+border-radius:20px;
+box-shadow:0 0 25px rgba(255,0,100,0.2);
+animation:fade .5s ease;
+}
+
+h1{
+font-size:22px;
+margin-bottom:10px;
+}
+
+p{
+font-size:15px;
+opacity:.8;
+margin-bottom:20px;
 }
 
 input{
-padding:10px;
-border-radius:20px;
+width:100%;
+padding:14px;
+border-radius:14px;
 border:none;
+outline:none;
+background:#2a2a2a;
+color:white;
+margin-bottom:15px;
+font-size:16px;
 text-align:center;
-margin-top:15px;
 }
 
 button{
-padding:12px 25px;
-background:#ff0066;
+width:100%;
+padding:14px;
+border-radius:14px;
 border:none;
+background:#ff0066;
 color:white;
-border-radius:25px;
+font-size:16px;
+font-weight:bold;
 cursor:pointer;
-margin-top:15px;
-transition:0.3s;
+transition:.2s;
 }
 
-button:hover{
-background:#ff3385;
-transform:scale(1.1);
+button:active{
+transform:scale(.97);
+}
+
+.progress{
+height:6px;
+background:#2a2a2a;
+border-radius:10px;
+margin-bottom:20px;
+overflow:hidden;
+}
+
+.progress-bar{
+height:100%;
+width:0%;
+background:#ff0066;
+transition:.4s;
 }
 
 img{
-width:280px;
-border-radius:20px;
-margin-top:20px;
-box-shadow:0px 0px 20px #ff0066;
+width:100%;
+border-radius:18px;
+margin-top:15px;
+box-shadow:0 0 20px rgba(255,0,100,.5);
+}
+
+.error{
+color:#ff4d6d;
+font-size:14px;
+margin-top:10px;
 }
 
 @keyframes fade{
-from{opacity:0; transform:translateY(20px);}
+from{opacity:0; transform:translateY(15px);}
 to{opacity:1; transform:translateY(0);}
-}
-
-.heart{
-position:absolute;
-color:#ff0066;
-animation:fall linear infinite;
-}
-
-@keyframes fall{
-0%{transform:translateY(-10vh);}
-100%{transform:translateY(110vh);}
 }
 </style>
 </head>
 
 <body>
 
-<div class="container" id="game">
-<h1>🔒 Área Secreta</h1>
-<p>Digite a senha para começar a missão...</p>
-<input type="password" id="senha" placeholder="Digite a senha">
-<br>
-<button onclick="checkSenha()">Entrar</button>
-<p id="erro" style="color:red;"></p>
+<div class="app">
+<div class="card" id="appContent">
+
+<h1>🔒 Área Privada</h1>
+<p>Digite a senha para acessar.</p>
+<input type="password" id="senha" placeholder="Senha">
+<button onclick="verificarSenha()">Entrar</button>
+<div class="error" id="erro"></div>
+
+</div>
 </div>
 
 <script>
 
-const senhaCorreta = "amor2024"; // MUDE AQUI A SENHA
+const senhaCorreta = "amor2024"; // ALTERE AQUI
 
 let fase = 0;
 
-function checkSenha(){
-let senha = document.getElementById("senha").value;
-if(senha === senhaCorreta){
-startGame();
-}else{
-document.getElementById("erro").innerText = "Senha incorreta... tente novamente ❤️";
-}
-}
-
-function startGame(){
-nextFase();
-}
-
-function nextFase(){
-const game = document.getElementById("game");
-game.style.animation="none";
-void game.offsetWidth;
-game.style.animation="fade 0.8s";
-
 const fases = [
-
-`
-<h1>🎮 Fase 1</h1>
-<p>Qual foi o lugar do nosso primeiro encontro?</p>
-<input id="resposta">
-<br>
-<button onclick="verificarResposta('resposta','cinema')">Responder</button>
-`,
-
-`
-<h1>🎮 Fase 2</h1>
-<p>Quem disse "eu te amo" primeiro?</p>
-<input id="resposta">
-<br>
-<button onclick="verificarResposta('resposta','eu')">Responder</button>
-`,
-
-`
-<h1>🎮 Fase 3</h1>
-<p>Qual música lembra a gente?</p>
-<input id="resposta">
-<br>
-<button onclick="verificarResposta('resposta','nossa musica')">Responder</button>
-`,
-
-`
-<h1>❤️ Missão Completa</h1>
-<p>Você zerou o jogo do nosso amor.</p>
-<img src="sua-foto.jpg">
-<h2>Eu escolheria você em todas as vidas.</h2>
-`
+{
+pergunta:"Qual foi o lugar do nosso primeiro encontro?",
+resposta:"cinema"
+},
+{
+pergunta:"Quem disse 'eu te amo' primeiro?",
+resposta:"eu"
+},
+{
+pergunta:"Qual música é a nossa música?",
+resposta:"nossa musica"
+}
 ];
 
-game.innerHTML = fases[fase];
-}
+function verificarSenha(){
+let senha = document.getElementById("senha").value;
 
-function verificarResposta(id, correta){
-let resposta = document.getElementById(id).value.toLowerCase();
-
-if(resposta === correta){
-fase++;
-nextFase();
+if(senha === senhaCorreta){
+fase = 0;
+carregarFase();
 }else{
-alert("Resposta errada 😏 tenta de novo!");
+document.getElementById("erro").innerText = "Senha incorreta.";
 }
 }
 
-// Corações caindo
-function createHeart(){
-const heart = document.createElement("div");
-heart.classList.add("heart");
-heart.innerHTML="❤";
-heart.style.left=Math.random()*100+"vw";
-heart.style.animationDuration=(Math.random()*3+2)+"s";
-heart.style.fontSize=(Math.random()*20+10)+"px";
-document.body.appendChild(heart);
-setTimeout(()=>{heart.remove();},5000);
+function carregarFase(){
+const app = document.getElementById("appContent");
+
+if(fase < fases.length){
+
+app.innerHTML = `
+<div class="progress">
+<div class="progress-bar" style="width:${(fase/fases.length)*100}%"></div>
+</div>
+<h1>Fase ${fase+1}</h1>
+<p>${fases[fase].pergunta}</p>
+<input id="resposta" placeholder="Digite sua resposta">
+<button onclick="verificarResposta()">Responder</button>
+<div class="error" id="erroResposta"></div>
+`;
+
+}else{
+app.innerHTML = `
+<div class="progress">
+<div class="progress-bar" style="width:100%"></div>
+</div>
+<h1>Missão Completa ❤️</h1>
+<p>Você desbloqueou o nível final do nosso amor.</p>
+<img src="sua-foto.jpg">
+<p style="margin-top:15px;font-weight:bold;">
+Eu escolheria você em todas as versões da minha vida.
+</p>
+`;
+}
 }
 
-setInterval(createHeart,300);
+function verificarResposta(){
+let resposta = document.getElementById("resposta").value.toLowerCase().trim();
+
+if(resposta === fases[fase].resposta){
+fase++;
+carregarFase();
+}else{
+document.getElementById("erroResposta").innerText = "Resposta errada 😏 tenta de novo.";
+}
+}
 
 </script>
 
